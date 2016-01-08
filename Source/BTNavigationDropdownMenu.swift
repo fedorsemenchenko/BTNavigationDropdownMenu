@@ -548,7 +548,14 @@ class BTTableViewCell: UITableViewCell {
         self.checkmarkIcon.image = self.configuration.checkMarkImage
         self.checkmarkIcon.contentMode = UIViewContentMode.ScaleAspectFill
         self.contentView.addSubview(self.checkmarkIcon)
+        
+        // Separator for cell
+        let separator = BTTableCellContentView(frame: cellContentFrame)
+        if let cellSeparatorColor = self.configuration.cellSeparatorColor {
+            separator.separatorColor = cellSeparatorColor
         }
+        self.contentView.addSubview(separator)
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -582,6 +589,14 @@ class BTTableCellContentView: UIView {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
+        let context = UIGraphicsGetCurrentContext()
+        
+        // Set separator color of dropdown menu based on barStyle
+        CGContextSetStrokeColorWithColor(context, self.separatorColor.CGColor)
+        CGContextSetLineWidth(context, 1)
+        CGContextMoveToPoint(context, 0, self.bounds.size.height)
+        CGContextAddLineToPoint(context, self.bounds.size.width, self.bounds.size.height)
+        CGContextStrokePath(context)
     }
 }
 
